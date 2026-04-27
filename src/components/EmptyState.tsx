@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
-import { StyleSheet, Text, View } from "react-native";
-import { colors, spacing } from "../theme";
+import { Text, View } from "react-native";
+import { spacing, useTheme } from "../theme";
+import { useThemedStyles } from "../theme/useThemedStyles";
 
 type Props = {
   icon: keyof typeof Ionicons.glyphMap;
@@ -9,6 +10,27 @@ type Props = {
 };
 
 export function EmptyState({ icon, title, message }: Props) {
+  const { colors } = useTheme();
+  const styles = useThemedStyles((c) => ({
+    container: {
+      flex: 1,
+      alignItems: "center" as const,
+      justifyContent: "center" as const,
+      paddingHorizontal: spacing.xl,
+      gap: spacing.sm,
+    },
+    title: {
+      fontSize: 17,
+      fontWeight: "700" as const,
+      color: c.text,
+      marginTop: spacing.sm,
+    },
+    message: {
+      color: c.textMuted,
+      fontSize: 14,
+      textAlign: "center" as const,
+    },
+  }));
   return (
     <View style={styles.container}>
       <Ionicons name={icon} size={56} color={colors.textMuted} />
@@ -17,24 +39,3 @@ export function EmptyState({ icon, title, message }: Props) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: spacing.xl,
-    gap: spacing.sm,
-  },
-  title: {
-    fontSize: 17,
-    fontWeight: "700",
-    color: colors.text,
-    marginTop: spacing.sm,
-  },
-  message: {
-    color: colors.textMuted,
-    fontSize: 14,
-    textAlign: "center",
-  },
-});

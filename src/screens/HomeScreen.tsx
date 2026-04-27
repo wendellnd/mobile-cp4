@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
+import { FlatList, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CategoryChip } from "../components/CategoryChip";
 import { EmptyState } from "../components/EmptyState";
@@ -9,7 +9,8 @@ import { RestaurantCard } from "../components/RestaurantCard";
 import { useCategories, useRestaurants, useUser } from "../hooks/queries";
 import { useCart } from "../hooks/useCart";
 import { useFavorites } from "../hooks/useFavorites";
-import { colors, spacing } from "../theme";
+import { spacing } from "../theme";
+import { useThemedStyles } from "../theme/useThemedStyles";
 
 export function HomeScreen() {
   const { data: user } = useUser();
@@ -17,6 +18,30 @@ export function HomeScreen() {
   const restaurantsQ = useRestaurants();
   const cart = useCart();
   const favorites = useFavorites();
+  const styles = useThemedStyles((c) => ({
+    safe: { flex: 1, backgroundColor: c.background },
+    titleWrap: {
+      paddingHorizontal: spacing.lg,
+      paddingTop: spacing.sm,
+      paddingBottom: spacing.md,
+    },
+    title: {
+      fontSize: 22,
+      fontWeight: "700" as const,
+      color: c.text,
+    },
+    subtitle: { color: c.textMuted, fontSize: 13, marginTop: 2 },
+    chips: {
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.sm,
+    },
+    list: {
+      paddingHorizontal: spacing.lg,
+      paddingTop: spacing.md,
+      paddingBottom: spacing.xxl,
+      flexGrow: 1,
+    },
+  }));
 
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
@@ -94,35 +119,3 @@ export function HomeScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  safe: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  titleWrap: {
-    paddingHorizontal: spacing.lg,
-    paddingTop: spacing.sm,
-    paddingBottom: spacing.md,
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: "700",
-    color: colors.text,
-  },
-  subtitle: {
-    color: colors.textMuted,
-    fontSize: 13,
-    marginTop: 2,
-  },
-  chips: {
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.sm,
-  },
-  list: {
-    paddingHorizontal: spacing.lg,
-    paddingTop: spacing.md,
-    paddingBottom: spacing.xxl,
-    flexGrow: 1,
-  },
-});

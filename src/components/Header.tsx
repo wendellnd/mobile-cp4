@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
-import { StyleSheet, Text, View } from "react-native";
-import { colors, spacing } from "../theme";
+import { Text, View } from "react-native";
+import { spacing, useTheme } from "../theme";
+import { useThemedStyles } from "../theme/useThemedStyles";
 
 type Props = {
   greeting: string;
@@ -8,6 +9,40 @@ type Props = {
 };
 
 export function Header({ greeting, address }: Props) {
+  const { colors } = useTheme();
+  const styles = useThemedStyles((c) => ({
+    container: {
+      flexDirection: "row" as const,
+      alignItems: "center" as const,
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.md,
+      gap: spacing.md,
+    },
+    greeting: {
+      fontSize: 18,
+      fontWeight: "700" as const,
+      color: c.text,
+    },
+    row: {
+      flexDirection: "row" as const,
+      alignItems: "center" as const,
+      gap: 4,
+      marginTop: 2,
+    },
+    address: {
+      color: c.textMuted,
+      fontSize: 13,
+      flexShrink: 1,
+    },
+    iconButton: {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      backgroundColor: c.surface,
+      alignItems: "center" as const,
+      justifyContent: "center" as const,
+    },
+  }));
   return (
     <View style={styles.container}>
       <View style={{ flex: 1 }}>
@@ -25,37 +60,3 @@ export function Header({ greeting, address }: Props) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-    gap: spacing.md,
-  },
-  greeting: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: colors.text,
-  },
-  row: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 4,
-    marginTop: 2,
-  },
-  address: {
-    color: colors.textMuted,
-    fontSize: 13,
-    flexShrink: 1,
-  },
-  iconButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.surface,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

@@ -1,14 +1,69 @@
-import { Alert, FlatList, StyleSheet, Text, View } from "react-native";
+import { Alert, FlatList, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Button } from "../components/Button";
 import { CartItemRow } from "../components/CartItemRow";
 import { EmptyState } from "../components/EmptyState";
 import { useCart } from "../hooks/useCart";
-import { colors, radius, spacing } from "../theme";
+import { radius, spacing } from "../theme";
+import { useThemedStyles } from "../theme/useThemedStyles";
 import { formatBRL } from "../utils/format";
 
 export function CartScreen() {
   const cart = useCart();
+  const styles = useThemedStyles((c) => ({
+    safe: { flex: 1, backgroundColor: c.background },
+    headerWrap: {
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.md,
+    },
+    title: {
+      fontSize: 22,
+      fontWeight: "700" as const,
+      color: c.text,
+    },
+    subtitle: { color: c.textMuted, fontSize: 13, marginTop: 2 },
+    list: {
+      paddingHorizontal: spacing.lg,
+      paddingTop: spacing.sm,
+      paddingBottom: spacing.lg,
+    },
+    summary: {
+      padding: spacing.lg,
+      borderTopWidth: 1,
+      borderTopColor: c.border,
+      backgroundColor: c.background,
+      borderTopLeftRadius: radius.lg,
+      borderTopRightRadius: radius.lg,
+    },
+    row: {
+      flexDirection: "row" as const,
+      justifyContent: "space-between" as const,
+      paddingVertical: 4,
+    },
+    rowLabel: { color: c.textMuted, fontSize: 14 },
+    rowValue: { color: c.text, fontSize: 14 },
+    bold: { fontWeight: "700" as const, color: c.text },
+    divider: {
+      height: 1,
+      backgroundColor: c.border,
+      marginVertical: spacing.sm,
+    },
+  }));
+
+  const Row = ({
+    label,
+    value,
+    bold,
+  }: {
+    label: string;
+    value: string;
+    bold?: boolean;
+  }) => (
+    <View style={styles.row}>
+      <Text style={[styles.rowLabel, bold && styles.bold]}>{label}</Text>
+      <Text style={[styles.rowValue, bold && styles.bold]}>{value}</Text>
+    </View>
+  );
 
   const handleCheckout = () => {
     Alert.alert(
@@ -82,76 +137,3 @@ export function CartScreen() {
     </SafeAreaView>
   );
 }
-
-function Row({
-  label,
-  value,
-  bold,
-}: {
-  label: string;
-  value: string;
-  bold?: boolean;
-}) {
-  return (
-    <View style={styles.row}>
-      <Text style={[styles.rowLabel, bold && styles.bold]}>{label}</Text>
-      <Text style={[styles.rowValue, bold && styles.bold]}>{value}</Text>
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  safe: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  headerWrap: {
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: "700",
-    color: colors.text,
-  },
-  subtitle: {
-    color: colors.textMuted,
-    fontSize: 13,
-    marginTop: 2,
-  },
-  list: {
-    paddingHorizontal: spacing.lg,
-    paddingTop: spacing.sm,
-    paddingBottom: spacing.lg,
-  },
-  summary: {
-    padding: spacing.lg,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-    backgroundColor: colors.background,
-    borderTopLeftRadius: radius.lg,
-    borderTopRightRadius: radius.lg,
-  },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingVertical: 4,
-  },
-  rowLabel: {
-    color: colors.textMuted,
-    fontSize: 14,
-  },
-  rowValue: {
-    color: colors.text,
-    fontSize: 14,
-  },
-  bold: {
-    fontWeight: "700",
-    color: colors.text,
-  },
-  divider: {
-    height: 1,
-    backgroundColor: colors.border,
-    marginVertical: spacing.sm,
-  },
-});

@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Pressable, StyleSheet, Text } from "react-native";
-import { colors, radius, spacing } from "../theme";
+import { Pressable, Text } from "react-native";
+import { radius, spacing, useTheme } from "../theme";
+import { useThemedStyles } from "../theme/useThemedStyles";
 import type { Category } from "../types";
 
 type Props = {
@@ -10,6 +11,26 @@ type Props = {
 };
 
 export function CategoryChip({ category, selected, onPress }: Props) {
+  const { colors } = useTheme();
+  const styles = useThemedStyles((c) => ({
+    chip: {
+      flexDirection: "row" as const,
+      alignItems: "center" as const,
+      gap: 6,
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.sm,
+      borderRadius: radius.pill,
+      backgroundColor: c.surface,
+      marginRight: spacing.sm,
+    },
+    chipSelected: { backgroundColor: c.primary },
+    label: {
+      color: c.text,
+      fontSize: 13,
+      fontWeight: "600" as const,
+    },
+    labelSelected: { color: c.white },
+  }));
   return (
     <Pressable
       onPress={onPress}
@@ -26,27 +47,3 @@ export function CategoryChip({ category, selected, onPress }: Props) {
     </Pressable>
   );
 }
-
-const styles = StyleSheet.create({
-  chip: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    borderRadius: radius.pill,
-    backgroundColor: colors.surface,
-    marginRight: spacing.sm,
-  },
-  chipSelected: {
-    backgroundColor: colors.primary,
-  },
-  label: {
-    color: colors.text,
-    fontSize: 13,
-    fontWeight: "600",
-  },
-  labelSelected: {
-    color: colors.white,
-  },
-});

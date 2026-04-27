@@ -5,13 +5,14 @@ import { CartScreen } from "../screens/CartScreen";
 import { HomeScreen } from "../screens/HomeScreen";
 import { ProfileScreen } from "../screens/ProfileScreen";
 import { useCart } from "../hooks/useCart";
-import { colors } from "../theme";
+import { useTheme } from "../theme";
 
 const Tab = createBottomTabNavigator();
 
 export function RootNavigator() {
   const cart = useCart();
   const insets = useSafeAreaInsets();
+  const { colors } = useTheme();
   const cartBadge = cart.totalQty > 0 ? cart.totalQty : undefined;
 
   return (
@@ -21,6 +22,7 @@ export function RootNavigator() {
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.textMuted,
         tabBarStyle: {
+          backgroundColor: colors.background,
           borderTopColor: colors.border,
           height: 60 + insets.bottom,
           paddingTop: 6,

@@ -1,6 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import { colors, radius, spacing } from "../theme";
+import { Image, Pressable, Text, View } from "react-native";
+import { radius, spacing, useTheme } from "../theme";
+import { useThemedStyles } from "../theme/useThemedStyles";
 import type { CartItem } from "../types";
 import { formatBRL } from "../utils/format";
 
@@ -17,6 +18,60 @@ export function CartItemRow({
   onDecrement,
   onRemove,
 }: Props) {
+  const { colors } = useTheme();
+  const styles = useThemedStyles((c) => ({
+    row: {
+      flexDirection: "row" as const,
+      padding: spacing.md,
+      backgroundColor: c.background,
+      borderRadius: radius.md,
+      borderWidth: 1,
+      borderColor: c.border,
+      marginBottom: spacing.md,
+      gap: spacing.md,
+    },
+    image: {
+      width: 64,
+      height: 64,
+      borderRadius: radius.sm,
+      backgroundColor: c.surfaceMuted,
+    },
+    info: { flex: 1, justifyContent: "center" as const },
+    name: { fontSize: 14, fontWeight: "700" as const, color: c.text },
+    price: { fontSize: 13, color: c.textMuted, marginTop: 2 },
+    subtotal: {
+      fontSize: 12,
+      color: c.primary,
+      fontWeight: "600" as const,
+      marginTop: 4,
+    },
+    actions: {
+      alignItems: "flex-end" as const,
+      justifyContent: "space-between" as const,
+    },
+    trash: { padding: 2 },
+    stepper: {
+      flexDirection: "row" as const,
+      alignItems: "center" as const,
+      backgroundColor: c.surface,
+      borderRadius: radius.pill,
+      paddingHorizontal: 6,
+      paddingVertical: 2,
+      gap: 6,
+    },
+    stepBtn: {
+      width: 22,
+      height: 22,
+      alignItems: "center" as const,
+      justifyContent: "center" as const,
+    },
+    qty: {
+      minWidth: 16,
+      textAlign: "center" as const,
+      fontWeight: "700" as const,
+      color: c.text,
+    },
+  }));
   return (
     <View style={styles.row}>
       <Image source={{ uri: item.image }} style={styles.image} />
@@ -46,70 +101,3 @@ export function CartItemRow({
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  row: {
-    flexDirection: "row",
-    padding: spacing.md,
-    backgroundColor: colors.background,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.border,
-    marginBottom: spacing.md,
-    gap: spacing.md,
-  },
-  image: {
-    width: 64,
-    height: 64,
-    borderRadius: radius.sm,
-    backgroundColor: colors.surfaceMuted,
-  },
-  info: {
-    flex: 1,
-    justifyContent: "center",
-  },
-  name: {
-    fontSize: 14,
-    fontWeight: "700",
-    color: colors.text,
-  },
-  price: {
-    fontSize: 13,
-    color: colors.textMuted,
-    marginTop: 2,
-  },
-  subtotal: {
-    fontSize: 12,
-    color: colors.primary,
-    fontWeight: "600",
-    marginTop: 4,
-  },
-  actions: {
-    alignItems: "flex-end",
-    justifyContent: "space-between",
-  },
-  trash: {
-    padding: 2,
-  },
-  stepper: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: colors.surface,
-    borderRadius: radius.pill,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    gap: 6,
-  },
-  stepBtn: {
-    width: 22,
-    height: 22,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  qty: {
-    minWidth: 16,
-    textAlign: "center",
-    fontWeight: "700",
-    color: colors.text,
-  },
-});

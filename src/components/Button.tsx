@@ -1,5 +1,6 @@
-import { Pressable, StyleSheet, Text } from "react-native";
-import { colors, radius, spacing } from "../theme";
+import { Pressable, Text } from "react-native";
+import { radius, spacing } from "../theme";
+import { useThemedStyles } from "../theme/useThemedStyles";
 
 type Props = {
   title: string;
@@ -14,6 +15,20 @@ export function Button({
   variant = "primary",
   disabled,
 }: Props) {
+  const styles = useThemedStyles((colors) => ({
+    base: {
+      paddingVertical: spacing.md,
+      borderRadius: radius.md,
+      alignItems: "center" as const,
+      justifyContent: "center" as const,
+    },
+    primary: { backgroundColor: colors.primary },
+    ghost: { backgroundColor: colors.surface },
+    disabled: { opacity: 0.5 },
+    label: { fontSize: 15, fontWeight: "700" as const },
+    primaryLabel: { color: colors.white },
+    ghostLabel: { color: colors.text },
+  }));
   return (
     <Pressable
       onPress={onPress}
@@ -36,31 +51,3 @@ export function Button({
     </Pressable>
   );
 }
-
-const styles = StyleSheet.create({
-  base: {
-    paddingVertical: spacing.md,
-    borderRadius: radius.md,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  primary: {
-    backgroundColor: colors.primary,
-  },
-  ghost: {
-    backgroundColor: colors.surface,
-  },
-  disabled: {
-    opacity: 0.5,
-  },
-  label: {
-    fontSize: 15,
-    fontWeight: "700",
-  },
-  primaryLabel: {
-    color: colors.white,
-  },
-  ghostLabel: {
-    color: colors.text,
-  },
-});
