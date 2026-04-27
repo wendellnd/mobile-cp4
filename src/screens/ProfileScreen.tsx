@@ -102,22 +102,6 @@ export function ProfileScreen() {
           title="Endereços"
           subtitle={user.defaultAddress.street}
         />
-        <ProfileSectionItem
-          icon="card-outline"
-          title="Pagamento"
-          subtitle="Cartões e Pix"
-        />
-
-        <SectionTitle>Atividade</SectionTitle>
-        <ProfileSectionItem
-          icon="receipt-outline"
-          title="Histórico de pedidos"
-        />
-        <ProfileSectionItem
-          icon="heart-outline"
-          title="Favoritos"
-          subtitle={`${favorites.ids.length} restaurante(s)`}
-        />
 
         <SectionTitle>Preferências</SectionTitle>
         <ProfileSectionItem
@@ -142,7 +126,6 @@ export function ProfileScreen() {
             />
           }
         />
-        <ProfileSectionItem icon="settings-outline" title="Configurações" />
 
         <View style={{ height: spacing.md }} />
         <ProfileSectionItem icon="log-out-outline" title="Sair" />

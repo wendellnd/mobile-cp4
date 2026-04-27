@@ -54,9 +54,6 @@ export function Header({ greeting, address }: Props) {
           </Text>
         </View>
       </View>
-      <View style={styles.iconButton}>
-        <Ionicons name="search" size={20} color={colors.text} />
-      </View>
     </View>
   );
 }
