@@ -1,0 +1,173 @@
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Switch,
+  Text,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { EmptyState } from "../components/EmptyState";
+import { Loading } from "../components/Loading";
+import { ProfileSectionItem } from "../components/ProfileSectionItem";
+import { useUser } from "../hooks/queries";
+import { useFavorites } from "../hooks/useFavorites";
+import { useUserPrefs } from "../hooks/useUserPrefs";
+import { colors, spacing } from "../theme";
+
+export function ProfileScreen() {
+  const { data: user, isLoading } = useUser();
+  const favorites = useFavorites();
+  const { prefs, update } = useUserPrefs();
+
+  if (isLoading || !user) {
+    return (
+      <SafeAreaView style={styles.safe} edges={["top"]}>
+        <Loading />
+      </SafeAreaView>
+    );
+  }
+
+  return (
+    <SafeAreaView style={styles.safe} edges={["top"]}>
+      <ScrollView contentContainerStyle={{ paddingBottom: spacing.xxl }}>
+        <View style={styles.headerWrap}>
+          <Text style={styles.headerTitle}>Perfil</Text>
+        </View>
+
+        <View style={styles.userCard}>
+          <Image source={{ uri: user.avatar }} style={styles.avatar} />
+          <View style={{ flex: 1 }}>
+            <Text style={styles.name}>{user.name}</Text>
+            <Text style={styles.email}>{user.email}</Text>
+            <Text style={styles.email}>{user.phone}</Text>
+          </View>
+        </View>
+
+        <SectionTitle>Conta</SectionTitle>
+        <ProfileSectionItem
+          icon="person-outline"
+          title="Dados pessoais"
+          subtitle="Nome, email, telefone"
+        />
+        <ProfileSectionItem
+          icon="location-outline"
+          title="Endereços"
+          subtitle={user.defaultAddress.street}
+        />
+        <ProfileSectionItem
+          icon="card-outline"
+          title="Pagamento"
+          subtitle="Cartões e Pix"
+        />
+
+        <SectionTitle>Atividade</SectionTitle>
+        <ProfileSectionItem
+          icon="receipt-outline"
+          title="Histórico de pedidos"
+        />
+        <ProfileSectionItem
+          icon="heart-outline"
+          title="Favoritos"
+          subtitle={`${favorites.ids.length} restaurante(s)`}
+        />
+
+        <SectionTitle>Preferências</SectionTitle>
+        <ProfileSectionItem
+          icon="notifications-outline"
+          title="Notificações"
+          right={
+            <Switch
+              value={prefs.notifications}
+              onValueChange={(v) => update.mutate({ notifications: v })}
+              trackColor={{ true: colors.primary, false: colors.border }}
+            />
+          }
+        />
+        <ProfileSectionItem
+          icon="moon-outline"
+          title="Modo escuro"
+          right={
+            <Switch
+              value={prefs.darkMode}
+              onValueChange={(v) => update.mutate({ darkMode: v })}
+              trackColor={{ true: colors.primary, false: colors.border }}
+            />
+          }
+        />
+        <ProfileSectionItem icon="settings-outline" title="Configurações" />
+
+        <View style={{ height: spacing.md }} />
+        <ProfileSectionItem icon="log-out-outline" title="Sair" />
+
+        {favorites.ids.length === 0 && (
+          <View
+            style={{ paddingHorizontal: spacing.lg, marginTop: spacing.md }}
+          >
+            <EmptyState
+              icon="heart-dislike-outline"
+              title="Nenhum favorito ainda"
+              message="Toque no coração de um restaurante para favoritar."
+            />
+          </View>
+        )}
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+
+function SectionTitle({ children }: { children: string }) {
+  return <Text style={styles.sectionTitle}>{children}</Text>;
+}
+
+const styles = StyleSheet.create({
+  safe: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
+  headerWrap: {
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
+  },
+  headerTitle: {
+    fontSize: 22,
+    fontWeight: "700",
+    color: colors.text,
+  },
+  userCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
+    gap: spacing.md,
+    backgroundColor: colors.surface,
+    marginHorizontal: spacing.lg,
+    borderRadius: 16,
+  },
+  avatar: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: colors.surfaceMuted,
+  },
+  name: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: colors.text,
+  },
+  email: {
+    color: colors.textMuted,
+    fontSize: 13,
+    marginTop: 2,
+  },
+  sectionTitle: {
+    fontSize: 12,
+    color: colors.textMuted,
+    fontWeight: "700",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.lg,
+    paddingBottom: spacing.sm,
+  },
+});
